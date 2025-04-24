@@ -1,0 +1,27 @@
+namespace: monitoring
+
+resources:
+  - namespace.yaml
+  - cadvisor/cadvisor-daemonset.yaml
+  - cadvisor/cadvisor-service.yaml
+  - dashboards/config.yaml
+  - grafana/dashboard-provider.yaml
+  - grafana/grafana-deployment.yaml
+  - grafana/grafana-service.yaml
+  - kube-state-metrics/rbac.yaml
+  - kube-state-metrics/kube-state-metrics-deployment.yaml
+  - kube-state-metrics/kube-state-metrics-service.yaml
+  - node-exporter/node-exporter-daemonset.yaml
+  - node-exporter/node-exporter-service.yaml
+  - prometheus/prometheus-config.yaml
+  - prometheus/prometheus-rbac.yaml
+  - prometheus/prometheus-deployment.yaml
+  - prometheus/prometheus-service.yaml
+
+configMapGenerator:
+  - name: grafana-dashboard
+    files:
+      - kubernetes-dashboard.json=dashboards/kubernetes-dashboard.json
+  - name: grafana-datasource
+    files:
+      - datasources/prometheus-datasource.yaml

@@ -1,0 +1,3 @@
+resources:
+  - example-app-deployment.yaml
+  - example-app-service.yaml

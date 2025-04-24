@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:9.5.2
+          ports:
+            - containerPort: 3000
+          env:
+            - name: GF_SECURITY_ADMIN_USER
+              value: "admin"
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: "prom-operator"
+          volumeMounts:
+            - name: dashboards
+              mountPath: /var/lib/grafana/dashboards
+            - name: dashboard-provider
+              mountPath: /etc/grafana/provisioning/dashboards
+            - name: grafana-datasource
+              mountPath: /etc/grafana/provisioning/datasources
+      volumes:
+        - name: dashboards
+          configMap:
+            name: grafana-dashboards
+        - name: dashboard-provider
+          configMap:
+            name: grafana-dashboard-provider
+        - name: grafana-datasource
+          configMap:
+            name: grafana-datasource
+            # no items: needed, Grafana will load *.yaml in that dir
